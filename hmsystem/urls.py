@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from hmsystem.myhmsystem.views import RegisterAPI, LoginAPI, ChangePasswordView
+from myhmsystem.views import RegisterAPI, LoginAPI, ChangePasswordView
 from knox import views as knox_views
 
 urlpatterns = [

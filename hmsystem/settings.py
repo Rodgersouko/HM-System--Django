@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'myhmsystem',
+    'hmsystem',
     'rest_framework',
     'knox',
     'django_rest_passwordreset',
@@ -69,6 +71,7 @@ TEMPLATES = [
         },
     },
 ]
+AUTH_USER_MODEL = 'myhmsystem.User'
 
 WSGI_APPLICATION = 'hmsystem.wsgi.application'
 
