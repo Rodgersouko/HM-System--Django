@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/home/moringa/Desktop/cm34/Hospital Management System/env/bin/python3" "$0" "$@"
+'''exec' "/home/moringa/Desktop/cm34/Hospital Management System/env/bin/python" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re
