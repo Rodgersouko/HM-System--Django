@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 import django_heroku
 import dj_database_url
-from decouple import config, Csv
+#from decouple import config, Csv
 
 from pathlib import Path
 
@@ -31,7 +31,7 @@ SECRET_KEY = '^m9z9=1*^%s=hju-vryr^5wjbtj-p%#r15drcz%9(a2vm3x^s^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [*]
+ALLOWED_HOSTS = []
 
 
 # Application definition
