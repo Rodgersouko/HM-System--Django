@@ -76,3 +76,35 @@ class User(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+
+class Doctor(models.Model):
+    #Appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+    age = models.IntegerField()
+    speciality = models.CharField(max_length=100)
+    # email = models.EmailField(verbose_name="email", max_length=60)
+
+    def __str_(self):
+        return self.doctor_speciality + '_' + self.name
+
+
+class Patient(models.Model):
+    Doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    age = models.IntegerField()
+    gender = models.CharField(max_length=100)
+    disease = models.CharField(max_length=100)
+
+
+class Appointment(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    description = models.TextField(max_length=255)
+    date = models.DateTimeField(auto_now_add=True, blank=True)
+
+class Services(models.Model):
+    Doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    description = models.TextField(max_length=255)
+    type = models.CharField(max_length=100)
+    
+    

@@ -1,0 +1,1 @@
+web: gunicorn Hospital Management System.wsgi 
