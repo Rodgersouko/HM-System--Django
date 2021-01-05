@@ -139,9 +139,6 @@ class Responses(models.Model):
     feedback = models.TextField(max_length=255)
     date = models.DateTimeField(auto_now_add=True, blank=True)
 
-
-
-
 class Services(models.Model):
     doctor = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.TextField(max_length=255)

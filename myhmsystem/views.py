@@ -79,14 +79,14 @@ class Appointments(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class Responses(APIView):
+class ResponseList(APIView):
     permission_classes = [IsAuthenticated]
     """
     List all users, or create a new user.
     """
     def get(self, request, format=None):
-        response = Responses.objects.all()
-        serializer = ResponseSerializer(response, many=True)
+        responsee = Responses.objects.all()
+        serializer = ResponseSerializer(responsee, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
