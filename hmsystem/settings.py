@@ -96,8 +96,10 @@ WSGI_APPLICATION = 'hmsystem.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME':'hospital',
+        'USER':'moringa',
+        'PASSWORD':'Kamunguna1'
     }
 }
 
@@ -163,6 +165,15 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.SessionAuthentication',
         'knox.auth.TokenAuthentication',
     ]
+}
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+    
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
