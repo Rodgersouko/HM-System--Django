@@ -1,52 +1,25 @@
 from rest_framework import serializers,viewsets
-from django.contrib.auth.models import User
 from .models import *
+from django.contrib.auth.hashers import make_password
 
 # User Serializer
 class UserSerializer(serializers.ModelSerializer):
+    @staticmethod
+    def validate_password(password:str)->str:
+        return make_password(password)
     class Meta:
         model = User
-        fields = ('id', 'username', 'email')
-
-# Register Serializer
-class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'email', 'password')
-        extra_kwargs = {'password': {'write_only': True}}
-
-    def create(self, validated_data):
-        user = User.objects.create_user(validated_data['username'], validated_data['email'], validated_data['password'])
-
-        return user
-
-
-class ChangePasswordSerializer(serializers.Serializer):
-    model = User
-
-    """
-    Serializer for password change endpoint.
-    """
-    old_password = serializers.CharField(required=True)
-    new_password = serializers.CharField(required=True)
-
-
-class DoctorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Doctor
-        fields = ('name', 'age', 'speciality')
-
-
-class PatientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Patient
-        fields = ('name', 'age', 'gender', 'disease')
-
+        exclude = ['user_permissions','groups']
 
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        fields = ('user', 'description', 'date')
+        fields = ('patient', 'description', 'date')
+
+class ResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Responses
+        fields = ('doctor','patient', 'feedback', 'date')
 
 
 class ServicesSerializer(serializers.ModelSerializer):

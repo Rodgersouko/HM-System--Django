@@ -3,8 +3,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django_rest_passwordreset.signals import reset_password_token_created
 from django.core.mail import send_mail
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager,PermissionsMixin,UserManager
 
 @receiver(reset_password_token_created)
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
@@ -24,86 +23,124 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
     )
 
 
-class MyUserManager(BaseUserManager):
-    def create_user(self, email, username, password=None):
-        if not email:
-            raise ValueError('Users must have email address')
-        if not username:
-            raise ValueError('Users must have username')
+class UserManager(BaseUserManager):
+
+    def create_user(self, email, password = None,username=None, is_active=True,is_doctor=False,is_patient=False,is_superuser=False,is_staff=False,is_admin=False):
+        if email is None:
+            raise TypeError('Users must have email address')
+        if password is None:
+            raise TypeError('Users must have password')
         user = self.model(
-            email=self.normalize_email(email),
-            username=username,
+            email=self.normalize_email(email)
         )
-
+        
         user.set_password(password)
+        user.is_active = is_active
+        # user.is_doctor = is_doctor
+        # print(is_doctor)
+        user.is_patient = False
+        user.is_superuser = is_superuser
+        user.is_staff = is_staff
+       
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, username, password):
+    def create_superuser(self, email,username=None, password=None):
+
         user = self.create_user(
-            email=self.normalize_email(email),
+            email,
             password=password,
-            username=username,
+            username = username,
+            is_staff=True,
+            is_admin=True,
+            is_superuser=True,
+            is_patient=False
         )
-        user.is_admin = True
-        user.is_staff = True
-        user.is_superuser = True
-        user.save(using=self._db)
+        user.save()
+        print(user)
         return user
 
+    def create_doctor(self,email,username=None,password=None):
+        user = self.create_user(
+            email,
+            password = password,
+            username = username,
+            is_staff = True,
+            is_doctor = True
+        )
+        return user
 
-class User(AbstractBaseUser):
+    def create_patient(self,email,username=None,password=None):
+        user = self.create_user(
+            email,
+            password = password,
+            username = username,
+            is_patient = True
+        )  
+
+GENDER = (
+    ('M',"Male"),
+    ('F',"Female"),
+
+)
+
+class User(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
-    username = models.CharField(max_length=30, unique=False)
+    username = models.CharField(max_length=20, unique=False)
+    gender = models.CharField(choices=GENDER,max_length=1)
+    age = models.IntegerField(default=0)
     date_joined = models.DateTimeField(
         verbose_name="date-joined", auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last-login", auto_now=True)
-    is_admin = models.BooleanField(default=False)
+    is_doctor = models.BooleanField(default=False)
+    is_patient = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
+    objects= UserManager()
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = []
 
-    objects = MyUserManager()
+    class Meta:
+        verbose_name = ('user')
+        verbose_name_plural = ('users')
 
     def __str_(self):
         return self.email
 
-    def has_perm(self, perm, obj=None):
-        return self.is_admin
+    # @property
+    # def is_admin(self):
+    #     return self.is_admin
+ 
+    # @property
+    # def is_doctor(self):
+    #     return self.is_doctor
 
-    def has_module_perms(self, app_label):
-        return True
+    # @property
+    # def is_patient(self):
+    #     return self.is_patient           
 
+    # def has_perm(self, perm, obj=None):
+    #     return self.is_admin
 
-class Doctor(models.Model):
-    #Appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)
-    name = models.CharField(max_length=200)
-    age = models.IntegerField()
-    speciality = models.CharField(max_length=100)
-    # email = models.EmailField(verbose_name="email", max_length=60)
-
-    def __str_(self):
-        return self.doctor_speciality + '_' + self.name
-
-
-class Patient(models.Model):
-    Doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    age = models.IntegerField()
-    gender = models.CharField(max_length=100)
-    disease = models.CharField(max_length=100)
-
+    # def has_module_perms(self, app_label):
+    #     return True
 
 class Appointment(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    patient = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.TextField(max_length=255)
     date = models.DateTimeField(auto_now_add=True, blank=True)
 
+class Responses(models.Model):
+    doctor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='doctor')
+    patient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='patient')
+    feedback = models.TextField(max_length=255)
+    date = models.DateTimeField(auto_now_add=True, blank=True)
+
 class Services(models.Model):
-    Doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.TextField(max_length=255)
     type = models.CharField(max_length=100)
     
