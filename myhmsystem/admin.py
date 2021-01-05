@@ -18,3 +18,5 @@ from django.contrib.auth.admin import UserAdmin
 # admin.site.register(User, AccountAdmin)
 # admin.site.register(Appointment)
 admin.site.register(User)
+admin.site.register(Responses)
+admin.site.register(Appointment)

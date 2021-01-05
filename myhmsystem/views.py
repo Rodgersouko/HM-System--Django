@@ -9,7 +9,7 @@ from rest_framework import status
 from knox.models import AuthToken
 from knox.views import LoginView as KnoxLoginView
 from .serializers import *
-from .models import User, Appointment
+from .models import *
 
 
 # class ChangePasswordView(generics.UpdateAPIView):
@@ -74,6 +74,23 @@ class Appointments(APIView):
 
     def post(self, request, format=None):
         serializer = AppointmentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class Responses(APIView):
+    permission_classes = [IsAuthenticated]
+    """
+    List all users, or create a new user.
+    """
+    def get(self, request, format=None):
+        response = Responses.objects.all()
+        serializer = ResponseSerializer(response, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = ResponseSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

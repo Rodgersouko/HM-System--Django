@@ -133,7 +133,11 @@ class Appointment(models.Model):
     description = models.TextField(max_length=255)
     date = models.DateTimeField(auto_now_add=True, blank=True)
 
-class
+class Responses(models.Model):
+    doctor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='doctor')
+    patient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='patient')
+    feedback = models.TextField(max_length=255)
+    date = models.DateTimeField(auto_now_add=True, blank=True)
 
 
 

@@ -16,6 +16,11 @@ class AppointmentSerializer(serializers.ModelSerializer):
         model = Appointment
         fields = ('patient', 'description', 'date')
 
+class ResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Responses
+        fields = ('doctor','patient', 'feedback', 'date')
+
 
 class ServicesSerializer(serializers.ModelSerializer):
     class Meta:
