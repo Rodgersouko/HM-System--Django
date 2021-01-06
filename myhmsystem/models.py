@@ -110,23 +110,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     def __str_(self):
         return self.email
 
-    # @property
-    # def is_admin(self):
-    #     return self.is_admin
- 
-    # @property
-    # def is_doctor(self):
-    #     return self.is_doctor
 
-    # @property
-    # def is_patient(self):
-    #     return self.is_patient           
-
-    # def has_perm(self, perm, obj=None):
-    #     return self.is_admin
-
-    # def has_module_perms(self, app_label):
-    #     return True
 
 class Appointment(models.Model):
     patient = models.ForeignKey(User, on_delete=models.CASCADE)
