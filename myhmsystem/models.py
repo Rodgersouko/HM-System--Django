@@ -4,6 +4,7 @@ from django.urls import reverse
 from django_rest_passwordreset.signals import reset_password_token_created
 from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager,PermissionsMixin,UserManager
+from cloudinary.models import CloudinaryField
 
 @receiver(reset_password_token_created)
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
@@ -36,8 +37,6 @@ class UserManager(BaseUserManager):
         
         user.set_password(password)
         user.is_active = is_active
-        # user.is_doctor = is_doctor
-        # print(is_doctor)
         user.is_patient = False
         user.is_superuser = is_superuser
         user.is_staff = is_staff
@@ -87,6 +86,7 @@ GENDER = (
 class User(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     username = models.CharField(max_length=20, unique=False)
+    image = CloudinaryField('image')
     gender = models.CharField(choices=GENDER,max_length=1)
     age = models.IntegerField(default=0)
     date_joined = models.DateTimeField(
