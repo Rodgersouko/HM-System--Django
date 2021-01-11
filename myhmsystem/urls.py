@@ -12,7 +12,7 @@ urlpatterns = [
     path('api/appointments', views.Appointments.as_view(), name='appointments'),
     path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/response', views.ResponseList.as_view(), name='responses')
+    path('api/response/', views.ResponseList.as_view(), name='responses')
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
