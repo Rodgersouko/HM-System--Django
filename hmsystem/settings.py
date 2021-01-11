@@ -15,6 +15,9 @@ from pathlib import Path
 import django_heroku
 import dj_database_url
 from decouple import config,Csv
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 MODE=config("MODE", default="dev")
 SECRET_KEY = config('SECRET_KEY')
@@ -147,7 +150,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 
@@ -196,6 +199,12 @@ REST_FRAMEWORK = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+cloudinary.config( 
+  cloud_name = "duwrz9hlg", 
+  api_key = "363478488465547", 
+  api_secret = "ACxZTeRAlduRQ3GVl7vggt0jX2k" 
+)
 
 # Configure Django App for Heroku.
 django_heroku.settings(locals())
