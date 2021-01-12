@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
         return make_password(password)
     class Meta:
         model = User
-        exclude = ['user_permissions','groups']
+        exclude = ['user_permissions','groups','password']
 
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
