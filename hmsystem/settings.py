@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'knox',
     'django_rest_passwordreset',
+    'corsheaders',
 ]
 
 AUTH_USER_MODEL = 'myhmsystem.User'
@@ -95,6 +96,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware' ,
 ]
 
 ROOT_URLCONF = 'hmsystem.urls'
@@ -166,6 +168,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
